@@ -555,8 +555,8 @@ class MinutahumanaController extends Controller
              ->leftJoin('empresa emp', 'm.nit_empresa = emp.nit')
              ->leftJoin('personas p', 'm.cedula_persona = p.cedula')
              ->leftJoin('usuario u', 'm.usuario = u.usuario')
-             ->leftJoin('centro_costo cc', 'm.codigo_dependencia = cc.codigo');
-             //->where('m.fecha="'.date('Y-m-d').'" ');
+             ->leftJoin('centro_costo cc', 'm.codigo_dependencia = cc.codigo')
+             ->where('m.fecha="'.date('Y-m-d').'" ');
 
 
             if (!in_array("administrador", $permisos)) {
@@ -575,11 +575,13 @@ class MinutahumanaController extends Controller
             }
 
 
-
+            $rows->groupBy('m.cedula_persona');
             $rowsCount= clone $rows;
 
             $ordenado='m.id';
             $rows->orderBy([$ordenado => SORT_DESC]);
+
+
 
             $rows->limit($rowsPerPage)->offset($start);
 
@@ -601,6 +603,7 @@ class MinutahumanaController extends Controller
                     'next_btn' => $next_btn,
                     'last_btn' => $last_btn,
                     'modelcount' => $modelcount,
+                    'model'=>$model
                     
                 ), true);
             }
@@ -608,6 +611,7 @@ class MinutahumanaController extends Controller
              $res.= $this->renderPartial('_partial', array(
             'query' => $query,
             'modelcount' => $modelcount,
+            'model'=>$model
     
                 ), true);
 

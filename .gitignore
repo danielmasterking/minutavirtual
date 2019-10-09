@@ -13,7 +13,7 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
-#/vendor
+/vendor
 
 # composer itself is not needed
 composer.phar
@@ -25,3 +25,5 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+#config database
+/config/db.php

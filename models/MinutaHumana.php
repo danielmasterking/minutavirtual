@@ -76,6 +76,27 @@ class MinutaHumana extends \yii\db\ActiveRecord
         return $this->hasOne(CentroCosto::className(), ['codigo' => 'codigo_dependencia']);
     }
 
+    public function Registros($id,$fecha){
+        $rows = (new \yii\db\Query())
+         ->select(['m.id','m.cedula_persona','m.hora_entrada','m.hora_salida','m.fecha','emp.nombre empresa','u.usuario','CONCAT(p.nombres, " ", p.apellidos) Persona','cc.nombre dependencia','ti.nombre tipo_invitado','to.nombre tipo_observacion','m.observacion','m.puesto','m.observacion_salida'])
+         ->from('minuta_humana m')
+         ->leftJoin('tipo_invitado ti', 'm.tipo_invitado = ti.id')
+         ->leftJoin('tipo_observacion to', 'm.tipo_observacion = to.id')
+         ->leftJoin('empresa emp', 'm.nit_empresa = emp.nit')
+         ->leftJoin('personas p', 'm.cedula_persona = p.cedula')
+         ->leftJoin('usuario u', 'm.usuario = u.usuario')
+         ->leftJoin('centro_costo cc', 'm.codigo_dependencia = cc.codigo')
+         ->where('m.fecha="'.$fecha.'" AND m.cedula_persona='.$id.'');
+
+
+        $ordenado='m.id';
+        $rows->orderBy([$ordenado => SORT_ASC]);
+        $command = $rows->createCommand();
+        //echo $command->sql;exit();
+        $query = $command->queryAll();
+
+        return $query;
+    }
 
 
 }

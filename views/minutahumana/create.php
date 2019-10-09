@@ -3,11 +3,12 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\widgets\TimePicker;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\MinutaHumana */
 
-$this->title = 'Registro Diario';
+$this->title = 'Ingreso de personal';
 $this->params['breadcrumbs'][] = ['label' => 'Minuta Humanas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,21 +16,51 @@ $this->params['breadcrumbs'][] = $this->title;
 
      <a href="<?php echo Url::toRoute('minutahumana/ventanainicio')?>" class="btn btn-primary">
         <i class="fa fa-reply"></i> Volver 
-    </a><br><br>
+    </a><br>
 
-    <form class="form-inline" method="post" action="<?php //echo Url::toRoute('prefacturaelectronica/index')?>" id='form'>
-    	<div class="form-group">
-	    	<div class="input-group">
-			  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-			  <input type="text" class="form-control" placeholder="Buscar..." aria-describedby="basic-addon1" id="buscar" style="width: 300px;" onkeypress="return pulsar(event);">
-			</div>
-		</div>
+    <h1 class="text-center"><i class="fa fa-sign-in "></i> <?= Html::encode($this->title) ?></h1>
 
-		 <button onclick="consultar(0)" type="button" class="btn btn-primary"> <i class="fa fa-search"></i> Buscar</button>
+    <form  method="post" action="<?php //echo Url::toRoute('prefacturaelectronica/index')?>" id='form'>
+    	<div class="row">
+            <div class="col-md-4">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                  <input type="text" class="form-control" placeholder="Buscar..." aria-describedby="basic-addon1" id="buscar"  onkeypress="return pulsar(event);">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?= 
+                    DatePicker::widget([
+                        'id' => 'desde',
+                        'name' => 'desde',
+                        'options' => ['placeholder' => 'Fecha Desde'],
+                        'pluginOptions' => [
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true
+                        ]
+                    ]);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <?= 
+                    DatePicker::widget([
+                        'id' => 'hasta',
+                        'name' => 'hasta',
+                        'options' => ['placeholder' => 'Fecha Hasta'],
+                        'pluginOptions' => [
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true
+                        ]
+                    ]);
+                ?>
+            </div>
+        </div>
+        <br>
+		<button onclick="consultar(0)" type="button" class="btn btn-primary pull-right"> <i class="fa fa-search"></i> Buscar</button>
     </form>
 
 
-    <h1><i class="fa fa-sign-in "></i> <?= Html::encode($this->title) ?></h1>
+    
 
     <?php 
 
@@ -50,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal" id="agregar_minuta">
- 	<i class="fa fa-plus"></i>
+ 	<i class="fa fa-plus"></i> Nueva
 	</button>
 
 	<div class="row">
@@ -258,6 +289,33 @@ $this->params['breadcrumbs'][] = $this->title;
     //     });
 
     // }
+function asignar(id){
 
+        
+        $('#form-salida').attr('action','<?php echo Url::toRoute('minutahumana/salida')?>'+"?id="+id);
+    }
+
+    function open_row(id){
+        $('#min'+id).show('slow/400/fast', function() {
+            
+        });
+        
+        $('#close_row'+id).show();
+        $('#open_row'+id).hide();
+        //document.getElementById('#min'+id).style.display = "block";
+        //alert('open');
+        //$(objeto).html('<i class="fa fa-minus"></i>');
+    }
+
+    function close_row(id){
+        $('#min'+id).hide('slow/400/fast', function() {
+            
+        });
+        $('#close_row'+id).hide();
+        $('#open_row'+id).show();
+        //document.getElementById('#min'+id).style.display = "block";
+        //alert('open');
+        //$(objeto).html('<i class="fa fa-minus"></i>');
+    }
 
 </script>
